@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  # docker run --name del --platform linux/amd64 \
+  # -v "/Users/lawrence/Downloads/Esc_Config_Tool_1_82_Linux:/Esc_Config_Tool_1_82_Linux" \
+  # -v "sleep.js:/headless/browser_device/dist/browser_device.js" \
+  # -p 5901:5901 \
+  # -p 6901:6901 \
+  # lncknight/whatsapp:20231218 sleep 9999
+  app:
+    build: .
+    platform: linux/amd64
+    volumes:
+      - /Users/lawrence/Downloads/Esc_Config_Tool_1_82_Linux:/Esc_Config_Tool_1_82_Linux/source
+      - ./sleep.js:/headless/browser_device/dist/browser_device.js
+      - ./am32_start.sh:/headless/am32_start.sh
+    privileged: true 
+    # devices:
+    #   # - "/dev/ttyUSB0:/dev/ttyUSB0"
+    #   - "/dev/cu.usbserial-110:/dev/ttyUSB0"
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"  # Map specific USB device
+      - "/dev/ttyUSB1:/dev/ttyUSB1"  # Map additional USB devices if needed    
+    ports:
+      - "5901:5901"
+      # - "6901:6901"
+    env_file:
+      - .env
+    command: ['bash', '/headless/am32_start.sh']
+
